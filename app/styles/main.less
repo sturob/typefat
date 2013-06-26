@@ -1,0 +1,50 @@
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "../bower_components/bootstrap/less/responsive.less"; // Don't forget to comment lines 22 to remove the second import call to **mixin.less**
+
+@import "../bower_components/font-awesome/less/font-awesome.less";
+@FontAwesomePath: "../fonts";
+
+.hero-unit {
+	margin: 50px auto 0 auto;
+}
+
+div {
+	line-height: 1.4em;
+}
+
+body {
+	overflow: hidden;
+}
+
+div#controls {
+	position: absolute;
+	bottom: 0;
+}
+
+span {
+	// background: rgba(255, 255, 255, 0.2);
+	display: inline-block;
+	text-align: center;
+	font-size: 48px;
+	margin-top: 40px;
+	position: relative;
+}
+
+b { display: block; }
+
+span.current:after {
+	position: absolute;
+	top: -14px;
+	right: -4px;
+	content: '';
+	width: 0px;
+	height: 50px;
+	animation: thePulse infinite 1.5s ease-in-out;
+	-webkit-animation: thePulse infinite 1.5s ease-in-out;
+}
+
+@-webkit-keyframes thePulse {
+      0% { box-shadow: 0 0 0 1px rgba(0,0,0,1); }
+     50% { box-shadow: 0 0 0 1px #000; }
+    100% { box-shadow: 0 0 0 0px rgba(0,0,0,0); }
+}
