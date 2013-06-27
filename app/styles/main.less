@@ -8,7 +8,7 @@
 	margin: 50px auto 0 auto;
 }
 
-div {
+div.lettering {
 	line-height: 1.4em;
 }
 
@@ -32,10 +32,12 @@ span {
 
 b { display: block; }
 
-span.current:after {
-	position: absolute;
-	top: -14px;
-	right: -4px;
+// span.current:after
+i#cursor {
+	display: inline-block;
+	position: relative;
+	top: 16px;
+	right: 0px;
 	content: '';
 	width: 0px;
 	height: 50px;

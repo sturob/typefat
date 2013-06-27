@@ -10332,7 +10332,7 @@ ul.icons li [class*=" icon-"] {
   margin: 50px auto 0 auto;
 }
 
-div {
+div.lettering {
   line-height: 1.4em;
 }
 
@@ -10357,10 +10357,11 @@ b {
   display: block;
 }
 
-span.current:after {
-  position: absolute;
-  top: -14px;
-  right: -4px;
+i#cursor {
+  position: relative;
+  top: 16px;
+  right: 0;
+  display: inline-block;
   width: 0;
   height: 50px;
   content: '';
