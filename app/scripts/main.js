@@ -6,7 +6,7 @@ var $lettering = $('.lettering'),
 
 $lettering.on('click', 'span', function(event) {
 	var $span = $(this);
-	if ( $span.width() / 2 > event.offsetX ) $cursor.insertBefore( $span );
+	if ($span.width() / 2 > event.offsetX) $cursor.insertBefore( $span );
 	else $cursor.insertAfter( $span );
 })
 
@@ -21,8 +21,14 @@ var letterEl = function (letter) { return '<span><b>' + letter + '</b></span>' }
 
 var Letter = function (character) {	
 	this.character = character;
-	this.baseWidth = measureLetter(character);
+	this.baseWidth = this.measure();
 	this.$el = $( letterEl(character) );
+}
+
+Letter.prototype.measure = function () {
+	var letter = this.character;
+	if (letter == ' ') letter = 'I';
+	return $('#ruler').html(letter).width()
 }
 
 var Cursor = {
@@ -64,17 +70,12 @@ var Lettering = (function() {
 }());
 
 var welcomeText = 'hey-there,-this-is-some-weirdness.-get-involved.-pad-pad-123-123';
-var measureLetter = function (letter) {
-	if (letter == ' ') letter = 'I';
-	return $('#ruler').html(letter).width()
-}
+
 
 
 function insertLetter( character ) {
-	// new
 	var letter = new Letter( character );
 	Lettering.startInserting( letter );
-
 	// view
 	letter.$el.insertBefore( $cursor  )
 }
@@ -147,13 +148,12 @@ var commands = {
 	}
 }
 
-
-
 window.onkeypress = function(k) {
 	if (String.fromCharCode(k.which) == '') return; // weird empty events
 	// repeated event
 	var current = Lettering.currentlyInserting();
 	if (current && current.character == String.fromCharCode(k.which)) return;
+
 	insertLetter( String.fromCharCode( k.which ) )
 };
 
