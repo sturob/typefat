@@ -3,9 +3,13 @@
 var $lettering = $('.lettering');
 		$cursor 	 = $('i#cursor');
 
+$lettering.on('click', 'span', function(event) {
+	$cursor.insertBefore( $(this) );
+})
+
 var letterEl = function (letter) { return '<span><b>' + letter + '</b></span>' };
 
-var welcomeText = 'hey there, this is some weirdness. get involved. pad pad 123 123';
+var welcomeText = 'hey-there,-this-is-some-weirdness.-get-involved.-pad-pad-123-123';
 
 var measureLetter = function (letter) {
 	if (letter == ' ') letter = 'I';
@@ -20,9 +24,7 @@ function getLetters(filter) {
 	return $('span').filter( filter ).map(function() {
 		var $el = $(this), position = $el.position();
 		return {
-			$el: $el,
-			top: position.top,
-			left: position.left
+			$el: $el,  top: position.top,  left: position.left
 		}
 	})
 }
@@ -70,7 +72,7 @@ var commands = {
 	del:function() {
 		$cursor.next().remove()
 	},
-	backspace:function() {
+	backspace:function() { // change 'hold down behavour to explode
 		$cursor.prev().remove()
 	}
 }
