@@ -1,10 +1,21 @@
 // var myApp = angular.module('myApp', []);
 
-var $lettering = $('.lettering');
-		$cursor 	 = $('i#cursor');
+$('body').focus();
+
+var $lettering = $('.lettering'),
+		$cursor 	 = $('i#cursor'),
+		selectedText;
 
 $lettering.on('click', 'span', function(event) {
-	$cursor.insertBefore( $(this) );
+	var $span = $(this);
+	
+	if ( $span.width() / 2 > event.offsetX ) $cursor.insertBefore( $span );
+	else $cursor.insertAfter( $span );
+})
+
+$('body').on('mouseup', function() {
+	selectedText = window.getSelection();
+	if (selectedText.getRangeAt(0).toString() == '') selectedText = null;
 })
 
 var letterEl = function (letter) { return '<span><b>' + letter + '</b></span>' };
@@ -17,7 +28,7 @@ var measureLetter = function (letter) {
 }
 
 var distance = function(a, b) {
-	return Math.abs(a.left - b.left) * Math.abs(a.top - b.top)
+	return Math.sqrt( Math.abs(a.left - b.left) * Math.abs(a.top - b.top) )
 };
 
 function getLetters(filter) {
@@ -73,7 +84,8 @@ var commands = {
 		$cursor.next().remove()
 	},
 	backspace:function() { // change 'hold down behavour to explode
-		$cursor.prev().remove()
+		if (selectedText) selectedText.getRangeAt(0).deleteContents()
+		else $cursor.prev().remove()
 	}
 }
 
