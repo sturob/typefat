@@ -1,12 +1,7 @@
-/////////////
-// cursor
+//////////////////////
+// cursor singleton
 
 var Cursor = (function() {
-	var distance = function(a, b) {
-		return Math.sqrt( Math.abs(a.left - b.left) * Math.abs(a.top - b.top) )
-	};
-
-	// var position = 0;
 	return {
 		$el: $('i#cursor'),
 		getPosition: function() {

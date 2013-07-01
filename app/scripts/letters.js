@@ -1,6 +1,5 @@
-
 /////////////
-// letters
+// letter
 
 var Letter = function (character) {	
 	this.character = character;

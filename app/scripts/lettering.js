@@ -1,8 +1,13 @@
+/////////////////////////
+// Lettering singleton
+
 var Lettering = (function() {
 	var timeInsertStarted,  lastInsert;
 
 	var distance = function(a, b) {
-		return Math.sqrt( Math.abs(a.left - b.left) * Math.abs(a.top - b.top) )
+		var topOffset  = Math.abs(a.top - b.top ),
+		    leftOffset = Math.abs(a.left - b.left );
+		return topOffset + leftOffset
 	};
 
 	return {
@@ -30,21 +35,6 @@ var Lettering = (function() {
 				return distance(letter.$el.position(), position)
 			})
 		},
-
-		// getLettersAbove: function(index) {
-		// 	var cursorTop = Cursor.$el.position().top;
-		// 	return _.chain(this.letters).filter( function(letter) {
-		// 	         return letter.$el.position().top + 50 < cursorTop
-		// 	       }).map(function(letter) {
-		// 	       	 var pos = letter.$el.position()
-		// 			     return {
-		// 				     $el: letter.$el,  top: pos.top,  left: pos.left
-		// 		       }
-		// 		     });
-		// },
-		// getLettersBelow: function(index) {
-
-		// },
 		get: function(index) {
 			return this.letters[index]
 		},
@@ -67,16 +57,9 @@ var Lettering = (function() {
 			console.log(range.startContainer)
 			console.log(range.endContainer)
 		},
-
-		// getRow: function(n) {
-
-		// },
 		currentlyInserting: function() {
 			if (timeInsertStarted) return lastInsert;
 			else return false;
-		},
-		dump: function() {
-			return _.map(this.letters, function(l) { return l.character }).join('');
 		}
 	}
 }());
