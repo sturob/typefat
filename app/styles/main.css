@@ -10347,7 +10347,8 @@ div#controls {
 
 span {
   position: relative;
-  display: inline-block;
+  display: block;
+  float: left;
   margin-top: 40px;
   font-size: 48px;
   text-align: center;
@@ -10359,9 +10360,10 @@ b {
 
 i#cursor {
   position: relative;
-  top: 16px;
+  top: 24px;
   right: 0;
-  display: inline-block;
+  display: block;
+  float: left;
   width: 0;
   height: 50px;
   content: '';

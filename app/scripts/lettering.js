@@ -8,9 +8,7 @@ var Lettering = (function() {
 			return this.letters[position]
 		},
 		startInserting: function (letter) {
-			// Cursor.getPosition();
-			// fix
-			this.letters.push( letter )
+			this.letters.splice( Cursor.getPosition(), 0, letter )
 			lastInsert = letter;
 			letter.startTime = timeInsertStarted = Date.now();
 		},
@@ -21,18 +19,23 @@ var Lettering = (function() {
 			this.letters.splice( position, 1 )
 		},
 		removeRange: function(range) {
+			function letterLevel (el) {
+				// if (el)
+			}
+
 			console.log(range.startContainer)
 			console.log(range.endContainer)
 		},
-		getRow: function(n) {
 
-		},
+		// getRow: function(n) {
+
+		// },
 		currentlyInserting: function() {
 			if (timeInsertStarted) return lastInsert;
 			else return false;
 		},
 		dump: function() {
-			return _.map(this.letters, function(l) { return l.character });
+			return _.map(this.letters, function(l) { return l.character }).join('');
 		}
 	}
 }());
