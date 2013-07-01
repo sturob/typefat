@@ -9,7 +9,17 @@ $('body').on('mouseup', function() {
 
 // do something
 
-var welcomeText = 'hey-there,-this-is-some weirdness.-get-involved.-pad-pad-123-123';
+var config = {
+	letterSize: 24,
+	cssZoom: true
+}
+
+if (config.cssZoom) {
+	$('body').addClass('cssZoom');
+}
+$('div.lettering, #ruler').css({ fontSize: config.letterSize })
+
+var welcomeText = 'The Range object represents a fragment of a document that can contain nodes and parts of text nodes in a given document.';
 
 function insertLetter( character ) {
 	var letter = new Letter( character );
@@ -17,11 +27,11 @@ function insertLetter( character ) {
 	letter.$el.insertBefore( Cursor.$el )
 }
 
-var initialMessageAsync = Lazy( welcomeText.split('') )//.async( 0 );
+var initialMessageAsync = Lazy( welcomeText.split('') ).async( 50 );
 
 initialMessageAsync.each(function(letter) {
 	insertLetter( letter );
-	setTimeout( Lettering.stopInserting, Math.random() * 200 );
+	setTimeout( Lettering.stopInserting, Math.random() * 100 );
 });
 
 var commands = {
@@ -51,6 +61,7 @@ window.onkeypress = function(k) {
 	// repeated event
 	var current = Lettering.currentlyInserting();
 	if (current && current.character == String.fromCharCode(k.which)) return;
+	else if (current) Lettering.stopInserting();
 
 	insertLetter( String.fromCharCode( k.which ) )
 };
@@ -73,7 +84,7 @@ window.onkeydown = function(k) {
 window.onkeyup = function (k) {
 	// log k.which + modifiers
 	if (k.which == 13) {
-		$lettering.append( '<br>' )
+		// Lettering.$el.append( '<br>' )
 	}
 	Lettering.stopInserting()
 }
@@ -86,12 +97,20 @@ var loop = setInterval(function() {
 	var current = Lettering.currentlyInserting();
 	if (current) {
 		var scale = Math.pow(1 + (Date.now() - current.startTime) / 700, 2);
-		current.$el.css({
-			width: scale * current.baseWidth
-		})
-		current.$el.find('b').css({
-			transform: 'scale(' + scale + ')'
-		});
+
+		if (config.cssZoom) {
+			current.$el.css({
+				width: scale * current.baseWidth
+			})
+			current.$el.find('b').css({
+				transform: 'scale(' + scale + ')'
+			});						
+		} else {
+			current.$el.find('b').css({
+				fontSize: 24 * scale
+			});
+		}
+
 	}
 }, 10);
 

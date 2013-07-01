@@ -13,7 +13,16 @@ div.lettering {
 }
 
 body {
-	overflow: hidden;
+	overflow-x: hidden;
+}
+
+body.cssZoom {
+	span {
+		display: inline-block;
+		b {
+			display: block;
+		}
+	}
 }
 
 div#controls {
@@ -21,30 +30,36 @@ div#controls {
 	bottom: 0;
 }
 
+
+
 span {
 	// background: rgba(255, 255, 255, 0.2);
-	display: block;
-	float: left;
+	// display: block;
+	// float: left;
 	text-align: center;
-	font-size: 48px;
-	margin-top: 40px;
+	// margin-top: 1em;
 	position: relative;
+	min-width: 0.2em; 
 }
-
-b { display: block; }
+// 
+// b { display: inline-block; }
 
 // span.current:after
 i#cursor {
-	display: block;
-	float: left;
-	position: relative;
-	top: 24px;
-	right: 0px;
+	display: inline;
+	// float: left;
+	height: 0px;
 	content: '';
 	width: 0px;
-	height: 50px;
-	animation: thePulse infinite 1.5s ease-in-out;
-	-webkit-animation: thePulse infinite 1.5s ease-in-out;
+
+	b {
+		position: relative;
+		// top: 1em;
+		right: 0px;
+		height: 1em;
+		animation: thePulse infinite 1.5s ease-in-out;
+		-webkit-animation: thePulse infinite 1.5s ease-in-out;		
+	}
 }
 
 @-webkit-keyframes thePulse {

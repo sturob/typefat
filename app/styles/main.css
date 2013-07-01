@@ -10337,7 +10337,15 @@ div.lettering {
 }
 
 body {
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+body.cssZoom span {
+  display: inline-block;
+}
+
+body.cssZoom span b {
+  display: block;
 }
 
 div#controls {
@@ -10347,26 +10355,21 @@ div#controls {
 
 span {
   position: relative;
-  display: block;
-  float: left;
-  margin-top: 40px;
-  font-size: 48px;
+  min-width: 0.2em;
   text-align: center;
 }
 
-b {
-  display: block;
+i#cursor {
+  display: inline;
+  width: 0;
+  height: 0;
+  content: '';
 }
 
-i#cursor {
+i#cursor b {
   position: relative;
-  top: 24px;
   right: 0;
-  display: block;
-  float: left;
-  width: 0;
-  height: 50px;
-  content: '';
+  height: 1em;
   -webkit-animation: thePulse infinite 1.5s ease-in-out;
           animation: thePulse infinite 1.5s ease-in-out;
 }
