@@ -1,88 +1,49 @@
 $('body').focus();
 
-var $lettering = $('.lettering'),
-		$cursor 	 = $('i#cursor'),
-		selectedText;
-
-$lettering.on('click', 'span', function(event) {
-	var $span = $(this);
-	if ($span.width() / 2 > event.offsetX) $cursor.insertBefore( $span );
-	else $cursor.insertAfter( $span );
-})
-
 $('body').on('mouseup', function() {
-	selectedText = window.getSelection();
-	if (selectedText.getRangeAt(0).toString() == '') selectedText = null;
+	Lettering.selectedText = window.getSelection();
+	if (Lettering.selectedText.getRangeAt(0).toString() == '') {
+		Lettering.selectedText = null
+	}
 });
 
+/////////////
+// cursor
 
-// letters + their sizes
-var letterEl = function (letter) { return '<span><b>' + letter + '</b></span>' };
-
-var Letter = function (character) {	
-	this.character = character;
-	this.baseWidth = this.measure();
-	this.$el = $( letterEl(character) );
-}
-
-Letter.prototype.measure = function () {
-	var letter = this.character;
-	if (letter == ' ') letter = 'I';
-	return $('#ruler').html(letter).width()
-}
-
-var Cursor = {
-	getPosition: function() {		
-	}
-}
-
-var Lettering = (function() {
-	var letters = [],  timeInsertStarted,  lastInsert;
-
+var Cursor = (function() {
+	// var position = 0;
 	return {
-		get: function(position) {
-			return letters[position]
+		$el: $('i#cursor'),
+		getPosition: function() {
+			return Lettering.$el.find('> *').toArray().indexOf( Cursor.$el[0] )
 		},
-		startInserting: function (letter) {
-			// Cursor.getPosition();
-			// fix
-			letters.push( letter )
-			lastInsert = letter;
-			letter.startTime = timeInsertStarted = Date.now();
+		left: function() {
+			Cursor.$el.insertBefore( Cursor.$el.prev() )
 		},
-		stopInserting: function () {
-			timeInsertStarted = null;
-		},
-		remove: function(position) {
-
-		},
-		removeRange: function(a, b) {
-
-		},
-		getRow: function(n) {
-
-		},
-		currentlyInserting: function() {
-			if (timeInsertStarted) return lastInsert;
-			else return false;
-		}
+		right: function() {
+			Cursor.$el.insertAfter( Cursor.$el.next() )
+		}		
 	}
 }());
 
-var welcomeText = 'hey-there,-this-is-some-weirdness.-get-involved.-pad-pad-123-123';
 
+// do something
 
+var welcomeText = 'hey-there,-this-is-some weirdness.-get-involved.-pad-pad-123-123';
 
 function insertLetter( character ) {
 	var letter = new Letter( character );
 	Lettering.startInserting( letter );
 	// view
-	letter.$el.insertBefore( $cursor  )
+	letter.$el.insertBefore( Cursor.$el )
 }
 
-_( welcomeText.split('') ).each( insertLetter );
+var initialMessageAsync = Lazy( welcomeText.split('') )//.async( 0 );
 
-setTimeout( Lettering.stopInserting, 240 ) 
+initialMessageAsync.each(function(letter) {
+	insertLetter( letter );
+	setTimeout( Lettering.stopInserting, Math.random() * 200 );
+});
 
 
 
@@ -102,7 +63,7 @@ function getLetters(filter) {
 var commands = {
 	cursor: {
 		up:function() {
-			var cursorPos = $cursor.position();
+			var cursorPos = Cursor.$el.position();
 
 			var $higherEls = function() { 
 				return $(this).position().top + 50 < cursorPos.top 
@@ -114,10 +75,10 @@ var commands = {
 			  return isCloser ? letter : best;
 			}, { top: 0, left: 0 });
 
-			$cursor.insertBefore( newPos.$el )
+			Cursor.$el.insertBefore( newPos.$el )
 		},
 		down:function() {
-			var cursorPos = $cursor.position();
+			var cursorPos = Cursor.$el.position();
 
 			var $lowerEls = function() { 
 				return $(this).position().top  > cursorPos.top 
@@ -130,21 +91,22 @@ var commands = {
 			  return isCloser ? letter : best;
 			}, { top: 0, left: 0 });
 
-			$cursor.insertBefore( newPos.$el )
+			Cursor.$el.insertBefore( newPos.$el )
 		},
-		left:function() {
-			$cursor.insertBefore( $cursor.prev() )
-		},
-		right:function() {
-			$cursor.insertAfter( $cursor.next() )
-		}		
+		left: Cursor.left,
+		right: Cursor.right
 	},
 	del:function() {
-		$cursor.next().remove()
+		Cursor.$el.next().remove()
 	},
 	backspace:function() { // change 'hold down behavour to explode
-		if (selectedText) selectedText.getRangeAt(0).deleteContents()
-		else $cursor.prev().remove()
+		if (Lettering.selectedText) {
+			Lettering.removeRange(  Lettering.selectedText.getRangeAt(0) )
+			Lettering.selectedText.getRangeAt(0).deleteContents()
+		} else {
+			Lettering.remove( Cursor.getPosition() - 1 )
+			Cursor.$el.prev().remove()
+		}
 	}
 }
 
@@ -173,7 +135,7 @@ window.onkeydown = function(k) {
 }
 
 window.onkeyup = function (k) {
-	console.log( k.which )
+	// log k.which + modifiers
 	if (k.which == 13) {
 		$lettering.append( '<br>' )
 	}
