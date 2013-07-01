@@ -17,3 +17,7 @@ Letter.prototype.measure = function () {
 Letter.prototype.html = function () { 
 	return '<span><b>' + this.character + '</b></span>'
 }
+
+Letter.prototype.toString = function() {
+	return this.character
+}

@@ -14,7 +14,6 @@ var welcomeText = 'hey-there,-this-is-some weirdness.-get-involved.-pad-pad-123-
 function insertLetter( character ) {
 	var letter = new Letter( character );
 	Lettering.startInserting( letter );
-	// view
 	letter.$el.insertBefore( Cursor.$el )
 }
 
@@ -25,58 +24,15 @@ initialMessageAsync.each(function(letter) {
 	setTimeout( Lettering.stopInserting, Math.random() * 200 );
 });
 
-
-
-var distance = function(a, b) {
-	return Math.sqrt( Math.abs(a.left - b.left) * Math.abs(a.top - b.top) )
-};
-
-function getLetters(filter) {
-	return $('span').filter( filter ).map(function() {
-		var $el = $(this), position = $el.position();
-		return {
-			$el: $el,  top: position.top,  left: position.left
-		}
-	})
-}
-
 var commands = {
 	cursor: {
-		up:function() {
-			var cursorPos = Cursor.$el.position();
-
-			var $higherEls = function() { 
-				return $(this).position().top + 50 < cursorPos.top 
-			}
-			window.letters = getLetters( $higherEls );
-
-			var newPos = _.reduce(letters, function(best, letter) {
-				var isCloser = distance(letter, cursorPos) < distance(best, cursorPos);
-			  return isCloser ? letter : best;
-			}, { top: 0, left: 0 });
-
-			Cursor.$el.insertBefore( newPos.$el )
-		},
-		down:function() {
-			var cursorPos = Cursor.$el.position();
-
-			var $lowerEls = function() { 
-				return $(this).position().top  > cursorPos.top 
-			}
-
-			window.letters = getLetters( $lowerEls );
-
-			var newPos = _.reduce(letters, function(best, letter) {
-				var isCloser = distance(letter, cursorPos) < distance(best, cursorPos);
-			  return isCloser ? letter : best;
-			}, { top: 0, left: 0 });
-
-			Cursor.$el.insertBefore( newPos.$el )
-		},
-		left: Cursor.left,
+		up:    Cursor.up,
+		down:  Cursor.down,
+		left:  Cursor.left,
 		right: Cursor.right
 	},
 	del:function() {
+		Lettering.remove( Cursor.getPosition() )
 		Cursor.$el.next().remove()
 	},
 	backspace:function() { // change 'hold down behavour to explode
