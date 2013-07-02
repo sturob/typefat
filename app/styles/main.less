@@ -14,10 +14,13 @@ div.lettering {
 
 body {
 	overflow-x: hidden;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 body.cssZoom {
-	span {
+	span.letter {
 		display: inline-block;
 		b {
 			display: block;
@@ -32,17 +35,23 @@ div#controls {
 
 
 
-span {
-	// background: rgba(255, 255, 255, 0.2);
+span.letter {
 	// display: block;
 	// float: left;
 	text-align: center;
 	// margin-top: 1em;
 	position: relative;
 	min-width: 0.2em; 
+	
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
 }
-// 
-// b { display: inline-block; }
+
+
+b {
+	position: relative
+}
 
 // span.current:after
 i#cursor {

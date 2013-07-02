@@ -24,7 +24,7 @@ var Lettering = (function() {
 		inDirection: function (letters, position, up) {
 			return _.filter(letters, function(letter) {
 				if (up) {
-					return letter.$el.position().top + 40 < position.top
+					return letter.$el.position().top + config.letterSize < position.top
 				} else {
 					return letter.$el.position().top > position.top
 				}
@@ -51,11 +51,18 @@ var Lettering = (function() {
 		},
 		removeRange: function(range) {
 			function letterLevel (el) {
-				// if (el)
+				return $(el).parents('span.letter')[0]
 			}
+			var $letters = Lettering.$el.find('span.letter');
+			var letters = $letters.toArray()
+			var n1 = letters.indexOf( letterLevel( range.startContainer ) )
+			var n2 = letters.indexOf( letterLevel( range.endContainer ) )
 
-			console.log(range.startContainer)
-			console.log(range.endContainer)
+			this.letters.splice( n1, n2 - n1 + 1 )
+
+			$letters.each(function(n) {
+				if (n >= n1 && n <= n2) $(this).remove()
+			})
 		},
 		currentlyInserting: function() {
 			if (timeInsertStarted) return lastInsert;

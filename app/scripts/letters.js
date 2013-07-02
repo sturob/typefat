@@ -14,7 +14,7 @@ Letter.prototype.measure = function () {
 }
 
 Letter.prototype.html = function () { 
-	return '<span><b>' + this.character + '</b></span>'
+	return '<span class="letter"><b>' + this.character + '</b></span>'
 }
 
 Letter.prototype.toString = function() {

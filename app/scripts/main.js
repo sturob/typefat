@@ -1,7 +1,11 @@
+
 $('body').focus();
 
 $('body').on('mouseup', function() {
-	Lettering.selectedText = window.getSelection();
+	if (window.getSelection().rangeCount == 1) {
+		Lettering.selectedText = window.getSelection();		
+	}
+
 	if (Lettering.selectedText.getRangeAt(0).toString() == '') {
 		Lettering.selectedText = null
 	}
@@ -11,7 +15,7 @@ $('body').on('mouseup', function() {
 
 var config = {
 	letterSize: 24,
-	cssZoom: true
+	cssZoom: false
 }
 
 if (config.cssZoom) {
@@ -27,7 +31,7 @@ function insertLetter( character ) {
 	letter.$el.insertBefore( Cursor.$el )
 }
 
-var initialMessageAsync = Lazy( welcomeText.split('') ).async( 50 );
+var initialMessageAsync = Lazy( welcomeText.split('') ).async( 0 );
 
 initialMessageAsync.each(function(letter) {
 	insertLetter( letter );
@@ -46,9 +50,11 @@ var commands = {
 		Cursor.$el.next().remove()
 	},
 	backspace:function() { // change 'hold down behavour to explode
+		if (window.getSelection().rangeCount == 1) {
+			Lettering.selectedText = window.getSelection();
+		}
 		if (Lettering.selectedText) {
-			Lettering.removeRange(  Lettering.selectedText.getRangeAt(0) )
-			Lettering.selectedText.getRangeAt(0).deleteContents()
+			Lettering.removeRange( Lettering.selectedText.getRangeAt(0) )
 		} else {
 			Lettering.remove( Cursor.getPosition() - 1 )
 			Cursor.$el.prev().remove()
@@ -57,7 +63,7 @@ var commands = {
 }
 
 window.onkeypress = function(k) {
-	if (String.fromCharCode(k.which) == '') return; // weird empty events
+	if (String.fromCharCode(k.which) == '') return; // any control keys
 	// repeated event
 	var current = Lettering.currentlyInserting();
 	if (current && current.character == String.fromCharCode(k.which)) return;
@@ -107,7 +113,8 @@ var loop = setInterval(function() {
 			});						
 		} else {
 			current.$el.find('b').css({
-				fontSize: 24 * scale
+				fontSize: 24 * scale,
+				top:  (24 * scale) - 24
 			});
 		}
 

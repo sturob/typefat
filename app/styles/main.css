@@ -10338,13 +10338,16 @@ div.lettering {
 
 body {
   overflow-x: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
 }
 
-body.cssZoom span {
+body.cssZoom span.letter {
   display: inline-block;
 }
 
-body.cssZoom span b {
+body.cssZoom span.letter b {
   display: block;
 }
 
@@ -10353,10 +10356,17 @@ div#controls {
   bottom: 0;
 }
 
-span {
+span.letter {
   position: relative;
   min-width: 0.2em;
   text-align: center;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+}
+
+b {
+  position: relative;
 }
 
 i#cursor {
