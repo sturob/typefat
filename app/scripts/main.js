@@ -5,7 +5,6 @@ $('body').on('mouseup', function() {
 	if (window.getSelection().rangeCount == 1) {
 		Lettering.selectedText = window.getSelection();		
 	}
-
 	if (Lettering.selectedText.getRangeAt(0).toString() == '') {
 		Lettering.selectedText = null
 	}
@@ -13,27 +12,46 @@ $('body').on('mouseup', function() {
 
 // do something
 
-var config = {
+var config = { // font  max size  min size
 	letterSize: 24,
 	cssZoom: false
-}
+};
 
 if (config.cssZoom) {
 	$('body').addClass('cssZoom');
 }
+if (config.cssZoom) {
+	config.letterAdjustment = function(letter, scale) {
+		letter.$el.css({
+			width: scale * current.baseWidth
+		})
+		letter.$el.find('b').css({
+			transform: 'scale(' + scale + ')'
+		});	
+	}
+} else {
+	config.letterAdjustment = function(letter, scale) {
+		letter.$el.find('b').css({
+			fontSize: config.letterSize * scale,
+			bottom: 0 - (config.letterSize * scale) / 4
+		});
+	}
+}
+
 $('div.lettering, #ruler').css({ fontSize: config.letterSize })
 
 var welcomeText = 'The Range object represents a fragment of a document that can contain nodes and parts of text nodes in a given document.';
 
-function insertLetter( character ) {
-	var letter = new Letter( character );
-	Lettering.startInserting( letter );
+function insertLetter(character) {
+	var letter = new Letter( character )
+	Lettering.startInserting( letter )
+	config.letterAdjustment( letter, 1 )
 	letter.$el.insertBefore( Cursor.$el )
 }
 
 var initialMessageAsync = Lazy( welcomeText.split('') ).async( 0 );
 
-initialMessageAsync.each(function(letter) {
+initialMessageAsync.each(function (letter) {
 	insertLetter( letter );
 	setTimeout( Lettering.stopInserting, Math.random() * 100 );
 });
@@ -99,25 +117,12 @@ window.onblur = function() {
 	Lettering.stopInserting()
 };
 
+
 var loop = setInterval(function() {
 	var current = Lettering.currentlyInserting();
 	if (current) {
 		var scale = Math.pow(1 + (Date.now() - current.startTime) / 700, 2);
-
-		if (config.cssZoom) {
-			current.$el.css({
-				width: scale * current.baseWidth
-			})
-			current.$el.find('b').css({
-				transform: 'scale(' + scale + ')'
-			});						
-		} else {
-			current.$el.find('b').css({
-				fontSize: 24 * scale,
-				top:  (24 * scale) - 24
-			});
-		}
-
+		config.letterAdjustment( current, scale );
 	}
 }, 10);
 
